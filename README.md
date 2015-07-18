@@ -10,7 +10,7 @@ Possibly on a temporary machine, or VM, or even drunk in a hotel.
 Git is required, duh
 
 ```bash
-git clone github.com/mhartington/quick-shell.git
+git clone https://github.com/mhartington/quick-shell.git
 cd quick-shell
 ./quick-shell.sh install
 ```
