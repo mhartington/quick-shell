@@ -1,24 +1,35 @@
 #!/bin/sh
 
-
-# prompt
-function parse_git_branch () {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ | \1$(parse_git_dirty)/"
-}
-
-function parse_git_dirty () {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
-}
-
 RED="\[\033[0;31m\]"
 YELLOW="\[\033[0;33m\]"
 GREEN="\[\033[0;32m\]"
 NO_COLOUR="\[\033[0m\]"
 
-#\u = user
-#\w = PWD
-export PROMPT_COMMAND='echo -ne "\033]0;${PWD/#$HOME/~}\007"'
-PS1="$YELLOW\u$NO_COLOUR:\w$GREEN\$(parse_git_branch)$NO_COLOUR\n$ "
+# inspired from http://www.opinionatedprogrammer.com/2011/01/colorful-bash-prompt-reflecting-git-status/
+function _git_prompt() {
+  local git_status="`git status -unormal 2>&1`"
+  if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
+    if [[ "$git_status" =~ nothing\ to\ commit ]]; then
+      local ansi=$GREEN
+    elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
+      local ansi=$RED
+    else
+      local ansi=$RED
+    fi
+    if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
+      branch=${BASH_REMATCH[1]}
+      #test "$branch" != master || branch=' '
+    else
+      # Detached HEAD.  (branch=HEAD is a faster alternative.)
+      branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null ||
+      echo HEAD`)"
+    fi
+    echo -n '| \['"$ansi"'\]'"$branch"'\[\e[0m\]'
+  fi
+}
+
+export _PS1="$YELLOW\u$NO_COLOUR:\w$(_git_prompt)"
+export PROMPT_COMMAND='export PS1="${_PS1} $(_git_prompt)\n$ "'
 
 #aliases and functions
 # Some directory listing with colors
