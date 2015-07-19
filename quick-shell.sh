@@ -31,10 +31,7 @@ backup () {
         else
             touch ~/.bash_profile && mv ~/.bash_profile ~/shell-backup/.bash_profile
         fi
-
         fi
-
-     fi
     echo "Backups are in ~/shell-backup"
 }
 
