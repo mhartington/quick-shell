@@ -19,3 +19,13 @@ Quit your terminal and start it up again, then you are good to go.
 
 Only works in bash right now, but I may do zsh later on.
 
+### Screenshots
+
+
+![quick-shell](https://raw.githubusercontent.com/mhartington/quick-shell/master/quick-shell.png)
+
+
+![quick-shell-repo](https://raw.githubusercontent.com/mhartington/quick-shell/master/quick-shell-repo.png)
+
+
+![quick-shell-dirty-repo](https://raw.githubusercontent.com/mhartington/quick-shell/master/quick-shell.png)
